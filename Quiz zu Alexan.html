@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz zu ALEXAN - Das Geheimnis von Mystiko - Die Legende der Drei Artefakte</title>
+<style>
+  body { font-family: Verdana, sans-serif; font-size: 20px; margin: 20px; background: #f9f9f9; color: #333; }
+  #quiz-container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+  h1, h2 { text-align: center; }
+  .question { margin-bottom: 20px; }
+  .answers label { display: block; margin-bottom: 15px; cursor: pointer; }
+  input[type="radio"] { margin-right: 12px; transform: scale(1.5); vertical-align: middle; }
+  button { background: #4CAF50; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 5px; cursor: pointer; }
+  button:disabled { background: #a5d6a7; cursor: not-allowed; }
+  #result { margin-top: 30px; text-align: center; }
+</style>
+</head>
+<body>
+<div id="quiz-container">
+  <h1>Quiz zu ALEXAN - Das Geheimnis von Mystiko - Die Legende der Drei Artefakte</h1>
+  <h2>Hallo mutiger Held! Viel Erfolg beim Quiz! 😊</h2>
+  <div id="question-area"></div>
+  <button id="next-btn" disabled>Weiter</button>
+  <div id="result"></div>
+</div>
+<script>
+const questions = [
+  { q: "Wer ist Meridan?", a: ["Ein Bandit", "Ein Schmied", "Der Hüter des Wissens (Weiser)", "Prinzessins Leibwächter"], correct: 2 },
+  { q: "Wie heißt die Elfin im Wald von Lunaria?", a: ["Lumelia", "Lyara", "Merida", "Ularia"], correct: 1 },
+  { q: "Wer ist Riven am Anfang für Alexan?", a: ["Ein Fremder", "Ein Freund", "Sein Bruder", "Ein Lehrer"], correct: 0 },
+  { q: "Welche Rolle hat Prinzessin Ayana?", a: ["Hüterin des Lichts", "Herrscherin der Schatten", "Königin der Drachen", "Botin des Windes"], correct: 0 },
+  { q: "Welches Wesen bewachte das magische Schild in Eldor?", a: ["Ein Riese", "Eine Wassernymphe", "Ein Feuerdrache", "Ein Steinwächter"], correct: 2 },
+  { q: "In welcher Reihenfolge soll Alexan die Artefakte finden?", a: ["Schild, Schwert, Bogen", "Schwert, Schild, Bogen", "Bogen, Schwert, Schild", "Schwert, Bogen, Schild"], correct: 1 },
+  { q: "Was geschieht mit dem Nebel, als Alexan das Kind führt?", a: ["Der Nebel färbt sich rot", "Der Nebel wird dichter", "Der Nebel verwandelt sich in Feuer", "Der Nebel zieht sich zurück"], correct: 3 },
+  { q: "Was erwartet Alexan im Wald von Lunaria?", a: ["Ein Dorf voller freundlicher Menschen", "Magische Rätsel und Prüfungen", "Ein Brunnen, der Wünsche erfüllt", "Eine Höhle voller Schätze"], correct: 1 },
+  { q: "Was passiert, als Alexan das Schwert findet?", a: ["Es singt", "Es verschwindet", "Es verwandelt sich", "Es leuchtet bläulich auf"], correct: 3 },
+  { q: "Was ist das besondere am Schild?", a: ["Es kann Schatten abwehren", "Es macht unsichtbar", "Es heilt Wunden", "Es verleiht Flügel"], correct: 0 },
+  { q: "Was ist Rivens wahres dunkles Ich?", a: ["Ein böser Zauberer aus einem anderen Land", "Eine Verkörperung seiner Zweifel", "Ein uralter Drache", "Ein Schattenwesen ohne Gestalt"], correct: 1 },
+  { q: "Welches Artefakt nutzte Alexan, um die Geister in Xandor zu beruhigen?", a: ["Der Obsidianstein", "Der Feuerstein vom Händler", "Der Handelssiegelstein", "Ein goldener Schlüssel"], correct: 0 },
+  { q: "Wie verhält sich Alexan in Gefahr?", a: ["Er rennt weg", "Er denkt nach und handelt mutig", "Er versteckt sich", "Er ruft immer um Hilfe"], correct: 1 },
+  { q: "Was löst Rivens Zorn aus?", a: ["Angst und Schmerz", "Der Verlust der Artefakte", "Ein altes Versprechen", "Ein Drache"], correct: 0 },
+  { q: "Welche Farbe haben Rivens Augen, wenn er von der Finsternis beherrscht wird?", a: ["Blau", "Grün", "Rot", "Silber"], correct: 2 },
+  { q: "Womit greift Riven Alexan im Kampf an?", a: ["Mit Pfeilen", "Mit dämonischen Kräften", "Mit Feuerbällen", "Mit einem Schwert"], correct: 1 },
+  { q: "Welche Eigenschaft braucht Alexan, um die Prüfungen im Heiligen Tempel der Erleuchtung zu bestehen?", a: ["Reichtum", "Schnelligkeit", "Magie", "Mut und Klugheit"], correct: 3 },
+  { q: "Welches Schwert wählt Alexan bei den Heiligen Prüfungen in Lunaria?", a: ["Das goldene Schwert", "Das dunkle Schwert", "Das zerbrechliche Schwert", "Das kleine Schwert"], correct: 2 },
+  { q: "Was passiert, wenn alle drei Artefakte vereint sind?", a: ["Das Licht kann die Finsternis besiegen", "Es öffnet sich ein Portal", "Ein neuer Herrscher wird gekrönt", "Sie verschwinden für immer"], correct: 0 },
+  { q: "Wer bewahrt den mächtigen Kristall, als Alexan ihn nicht weitertragen will?", a: ["Lyara", "Der Dorfälteste", "Meridan (der Weise)", "Der Magier"], correct: 2 }
+];
+let currentQuestion = 0;
+const userAnswers = new Array(questions.length).fill(null);
+const questionArea = document.getElementById("question-area");
+const nextBtn = document.getElementById("next-btn");
+const resultDiv = document.getElementById("result");
+
+function showQuestion(index) {
+  nextBtn.disabled = true;
+  const q = questions[index];
+  let html = `<div class="question"><strong>Frage ${index+1} von ${questions.length}:</strong> ${q.q}</div><div class="answers">`;
+  q.a.forEach((answer, i) => {
+    html += `<label><input type="radio" name="answer" value="${i}"> ${answer}</label>`;
+  });
+  html += `</div>`;
+  questionArea.innerHTML = html;
+  const radios = document.querySelectorAll('input[name="answer"]');
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      nextBtn.disabled = false;
+      userAnswers[currentQuestion] = parseInt(radio.value);
+    });
+  });
+  if(userAnswers[currentQuestion] !== null) {
+    radios.forEach(radio => {
+      if(parseInt(radio.value) === userAnswers[currentQuestion]) {
+        radio.checked = true;
+        nextBtn.disabled = false;
+      }
+    });
+  }
+}
+
+function showResult() {
+  let correctCount = 0;
+  questions.forEach((q, i) => {
+    if(userAnswers[i] === q.correct) correctCount++;
+  });
+  const percent = Math.round((correctCount / questions.length) * 100);
+
+  let html = `<h2>Dein Ergebnis:</h2>
+              <h3>${correctCount} von ${questions.length} richtig (${percent}%)</h3>`;
+
+  if (percent >= 80) {
+    html += `<h2 style="color:green;">BRAVO Tolle Leistung!</h2>`;
+  } else if (percent >= 60) {
+    html += `<h2 style="color:orange;">Gute Leistung!</h2>`;
+  } else {
+    html += `<h2 style="color:red;">OK du musst es nochmals versuchen.</h2>`;
+  }
+
+  questionArea.innerHTML = "";
+  nextBtn.style.display = "none";
+  resultDiv.innerHTML = html;
+}
+
+nextBtn.addEventListener("click", () => {
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    showQuestion(currentQuestion);
+    resultDiv.innerHTML = "";
+  } else {
+    showResult();
+  }
+});
+
+showQuestion(currentQuestion);
+</script>
+</body>
+</html>
