@@ -1,0 +1,68 @@
+/* Allgemeines Layout */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #fdf6e3;
+  color: #333;
+}
+
+header {
+  background-color: #8b0000;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.book-intro img {
+  max-width: 300px;
+  display: block;
+  margin: 0 auto 1rem auto;
+  border: 2px solid #8b0000;
+  border-radius: 5px;
+}
+
+.book-intro p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.book-intro ul {
+  list-style-type: disc;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+.quiz-button {
+  display: inline-block;
+  background-color: #8b0000;
+  color: #fff;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.quiz-button:hover {
+  background-color: #a50000;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #eee;
+  font-size: 0.9rem;
+}
